@@ -1,0 +1,68 @@
+.add-student-container {
+    max-width: 300px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  } 
+  .add-student-container h2 {
+    text-align: center;
+    margin-bottom: 24px;
+    color: #ff6b00;
+    font-weight: 700;
+  }
+  
+  .add-student-container form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .add-student-container input,
+  .add-student-container select {
+    margin-bottom: 15px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: 0.3s ease;
+  }
+  
+  .add-student-container input:focus,
+  .add-student-container select:focus {
+    border-color: #ff6b00;
+    outline: none;
+  }
+  
+  .form-check {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .form-check input[type='checkbox'] {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+  }
+  
+  .form-check label {
+    font-size: 16px;
+    color:green;
+  }
+  
+  .add-student-container button {
+    background-color: #ff6b00;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-student-container button:hover {
+    background-color: #e65c00;
+  }
+  
