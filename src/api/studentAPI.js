@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = (process.env.REACT_APP_API_URL || 'https://student-management-system-backend-e521.onrender.com').replace(/\/$/, '');
+const API_URL = (process.env.REACT_APP_API_URL || 'https://student-management-system-beige-sigma.vercel.app/').replace(/\/$/, '');
 const BASE_URL = `${API_URL}/students`;
 
 export const getAllStudents = async () => {
