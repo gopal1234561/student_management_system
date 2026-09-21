@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AddStudent.css';
 
-const API_URL = (process.env.REACT_APP_API_URL || 'https://student-management-system-backend-e521.onrender.com').replace(/\/$/, '');
+const API_URL = (process.env.REACT_APP_API_URL || 'https://student-management-system-1-cw3r.onrender.com').replace(/\/$/, '');
 
 const AddStudent = () => {
   const [formData, setFormData] = useState({
