@@ -1,13 +1,14 @@
 # Student Management System
 
-A full-stack student management application with a React frontend and MongoDB-backed Vercel API routes.
+A full-stack student management application with a React frontend, Express/Node.js backend, and MongoDB Atlas database.
 
 ## Architecture
 
 - Frontend: React, React Router, Bootstrap, Axios, Chart.js
-- Backend: Vercel serverless API routes with Node.js and Mongoose
+- Backend: Express + Node.js + Mongoose
 - Database: MongoDB Atlas
-- Deployment: one Vercel project for both frontend and backend
+- Frontend deployment: Vercel
+- Backend deployment: Render
 
 ## Project structure
 
@@ -15,63 +16,92 @@ A full-stack student management application with a React frontend and MongoDB-ba
 student_management_system/
 ├── src/                  # React frontend
 ├── public/               # Frontend assets
-├── api/                  # Vercel API routes
-│   ├── _lib/db.js
-│   ├── students/
-│   │   ├── index.js
-│   │   └── [id].js
-│   ├── stats.js
-│   ├── health.js
-│   └── index.js
+├── backend/              # Express + Node.js backend
+│   ├── server.js
+│   ├── package.json
+│   └── .env.example
 ├── package.json
-└── vercel.json
+└── README.md
 ```
 
-## API endpoints
+## Backend API endpoints
 
-- GET `/api/health`
-- GET `/api/students`
-- POST `/api/students`
-- GET `/api/students/:id`
-- PUT `/api/students/:id`
-- DELETE `/api/students/:id`
-- GET `/api/stats`
+- GET `/`
+- GET `/health`
+- GET `/students`
+- POST `/students`
+- GET `/students/:id`
+- PUT `/students/:id`
+- DELETE `/students/:id`
+- GET `/stats`
 
 ## Local development
 
-Install dependencies:
+### Frontend
 
 ```bash
 npm install
-```
-
-Set the MongoDB connection string in your local environment:
-
-```text
-MONGODB_URI=your-mongodb-atlas-connection-string
-```
-
-Then run:
-
-```bash
 npm start
 ```
 
-## Vercel deployment
+### Backend
 
-Connect this repository to Vercel with the project root as the Root Directory.
+```bash
+cd backend
+npm install
+npm start
+```
 
-Add this environment variable in Vercel:
+Create a `backend/.env` file:
+
+```text
+MONGODB_URI=your-mongodb-atlas-connection-string
+PORT=5000
+CORS_ORIGIN=http://localhost:3000
+```
+
+## Deployment
+
+### Backend — Render
+
+Set the Render service Root Directory to:
+
+```text
+backend
+```
+
+Build Command:
+
+```npm install```
+
+Start Command:
+
+```npm start```
+
+Add this Render environment variable:
 
 ```text
 MONGODB_URI=your-mongodb-atlas-connection-string
 ```
 
-Do not commit the MongoDB connection string to GitHub.
+Optionally set:
 
-The frontend uses the same-domain API path `/api`, so a separate Render backend URL is no longer required.
+```text
+CORS_ORIGIN=https://your-frontend-domain.vercel.app
+```
+
+### Frontend — Vercel
+
+Deploy the repository root as the Vercel project.
+
+Set:
+
+```text
+REACT_APP_API_URL=https://student-management-system-backend-e521.onrender.com
+```
+
+The frontend communicates with the separate Express backend on Render.
 
 ## MongoDB Atlas
 
-The MongoDB Atlas cluster must allow connections from Vercel. For a simple deployment, configure the Atlas Network Access/IP access list appropriately for your deployment, while keeping database credentials private.
-
+Keep the MongoDB connection string private. The Render backend uses `MONGODB_URI` to connect to MongoDB Atlas.
