@@ -3,58 +3,46 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+const API_URL = (process.env.REACT_APP_API_URL || 'https://student-management-system-backend-e521.onrender.com').replace(/\/$/, '');
+
 const EditStudent = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
-    studentId: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    dob: '',
-    department: '',
-    enrollmentYear: '',
-    isActive: true,
+    studentId: '', firstName: '', lastName: '', email: '', dob: '',
+    department: '', enrollmentYear: '', isActive: true,
   });
 
   useEffect(() => {
     const fetchStudent = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/students/${id}`);
+        const res = await axios.get(`${API_URL}/students/${id}`);
         const student = res.data;
-        const formattedDob = new Date(student.dob).toISOString().split('T')[0];
-
-        setFormData({
-          ...student,
-          dob: formattedDob,
-        });
+        const formattedDob = student.dob ? new Date(student.dob).toISOString().split('T')[0] : '';
+        setFormData({ ...student, dob: formattedDob });
       } catch (err) {
         console.error('Error fetching student:', err);
         toast.error('Failed to fetch student data');
       }
     };
-
     fetchStudent();
   }, [id]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === 'checkbox' ? checked : value,
-    });
+    setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`${process.env.REACT_APP_API_URL}/students/${id}`, formData);
+      await axios.put(`${API_URL}/students/${id}`, formData);
       toast.success('Student updated successfully');
       navigate('/students');
     } catch (err) {
       console.error('Update error:', err.response?.data || err.message);
-      toast.error('Failed to update student');
+      toast.error(err.response?.data?.error || 'Failed to update student');
     }
   };
 
@@ -66,9 +54,9 @@ const EditStudent = () => {
         <input name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} className="form-control mb-2" required />
         <input name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} className="form-control mb-2" required />
         <input name="email" placeholder="Email" type="email" value={formData.email} onChange={handleChange} className="form-control mb-2" required />
-        <input name="dob" placeholder="Date of Birth" type="date" value={formData.dob} onChange={handleChange} className="form-control mb-2" required />
+        <input name="dob" type="date" value={formData.dob} onChange={handleChange} className="form-control mb-2" required />
         <input name="department" placeholder="Department" value={formData.department} onChange={handleChange} className="form-control mb-2" required />
-        <input name="enrollmentYear" placeholder="Enrollment Year" type="number" value={formData.enrollmentYear} onChange={handleChange} className="form-control mb-2" required />
+        <input name="enrollmentYear" type="number" value={formData.enrollmentYear} onChange={handleChange} className="form-control mb-2" required />
         <div className="form-check mb-2">
           <input name="isActive" type="checkbox" className="form-check-input" checked={formData.isActive} onChange={handleChange} />
           <label className="form-check-label">Is Active</label>
@@ -80,5 +68,3 @@ const EditStudent = () => {
 };
 
 export default EditStudent;
-
-
