@@ -4,7 +4,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const API_URL = (process.env.REACT_APP_API_URL || 'https://student-management-system-backend-e521.onrender.com').replace(/\/$/, '');
+const API_URL = (process.env.REACT_APP_API_URL || 'https://student-management-system-1-cw3r.onrender.com').replace(/\/$/, '');
 
 const EditStudent = () => {
   const { id } = useParams();
