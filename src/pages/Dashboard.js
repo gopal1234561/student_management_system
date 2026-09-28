@@ -65,7 +65,13 @@ const Dashboard = () => {
       <section className="dashboard-hero">
         <div className="container">
           <div className="dashboard-hero-content">
-            <span className="dashboard-kicker">Student Administration</span>
+            <div className="dashboard-live-kicker" aria-label="Student Administration">
+  <div className="dashboard-live-track">
+    <span className="dashboard-live-item"><i></i> Student Administration</span>
+    <span className="dashboard-live-item"><i></i> Student Administration</span>
+    <span className="dashboard-live-item"><i></i> Student Administration</span>
+  </div>
+</div>
             <h1>Student Management Dashboard</h1>
             <p>Get a quick overview of your student records and jump into detailed management or enrollment analytics.</p>
             <div className="d-flex flex-wrap justify-content-center gap-2">
