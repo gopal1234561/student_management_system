@@ -8,7 +8,7 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: hwb(210 71% 4%);
+  background: #f4f7ff;
 }
 
 .app {
@@ -178,4 +178,90 @@ body {
   .student-list-page .btn {
     width: auto;
   }
+}
+
+
+/* Shared modern app background and surfaces */
+body {
+  background:
+    radial-gradient(ellipse at 8% 8%, rgba(129, 140, 248, .13), transparent 34rem),
+    radial-gradient(ellipse at 92% 28%, rgba(45, 212, 191, .10), transparent 30rem),
+    linear-gradient(145deg, #f7f9ff 0%, #eef3ff 48%, #f8faff 100%);
+  background-attachment: fixed;
+  color: #172033;
+}
+
+.app {
+  position: relative;
+  isolation: isolate;
+}
+
+.navbar {
+  background: rgba(255, 255, 255, .88) !important;
+  border-bottom: 1px solid rgba(148, 163, 184, .2);
+  box-shadow: 0 6px 24px rgba(30, 41, 59, .06);
+  backdrop-filter: blur(16px);
+}
+
+.student-list-page {
+  padding-top: .5rem;
+  padding-bottom: 2.5rem;
+}
+
+.student-list-page h2 {
+  color: #172554;
+  font-weight: 800;
+  letter-spacing: -.03em;
+}
+
+.student-filters {
+  background: rgba(255, 255, 255, .88);
+  border: 1px solid rgba(203, 213, 225, .7);
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(30, 41, 59, .07) !important;
+  backdrop-filter: blur(12px);
+}
+
+.student-table-wrapper {
+  overflow-x: auto;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, .94);
+  box-shadow: 0 12px 32px rgba(30, 41, 59, .07);
+}
+
+.student-table-wrapper table {
+  box-shadow: none !important;
+}
+
+.student-table-wrapper tbody tr {
+  transition: background-color .16s ease;
+}
+
+.student-table-wrapper tbody tr:hover {
+  background-color: #eef2ff;
+}
+
+.student-list-page .form-control,
+.student-list-page .form-select {
+  min-height: 42px;
+  border-color: #dbe2ee;
+  border-radius: 10px;
+}
+
+.student-list-page .form-control:focus,
+.student-list-page .form-select:focus {
+  border-color: #818cf8;
+  box-shadow: 0 0 0 .2rem rgba(99, 102, 241, .13);
+}
+
+.student-list-page .btn {
+  border-radius: 9px;
+  font-weight: 600;
+  transition: transform .16s ease, box-shadow .16s ease;
+}
+
+.student-list-page .btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 12px rgba(30, 41, 59, .12);
 }
