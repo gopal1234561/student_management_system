@@ -513,3 +513,58 @@ body {
 .dashboard-feature-grid a{font-size:.85rem;font-weight:700;color:#4f46e5;text-decoration:none}
 .dashboard-feature-grid a:hover{text-decoration:underline}
 @media(max-width:575.98px){.snapshot-grid{grid-template-columns:1fr 1fr}.snapshot-grid>div:last-child{grid-column:1/-1}}
+
+
+/* Dashboard statistic icons */
+.dashboard-stat-top {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  min-height: 42px;
+}
+
+.dashboard-stat-icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  color: #4f46e5;
+  background: #eef2ff;
+  border: 1px solid #dbe4ff;
+}
+
+.dashboard-stat-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.dashboard-stat-icon-active {
+  color: #059669;
+  background: #ecfdf5;
+  border-color: #c7f9df;
+}
+
+.dashboard-stat-icon-inactive {
+  color: #dc2626;
+  background: #fef2f2;
+  border-color: #fee2e2;
+}
+
+.dashboard-stat-icon-departments {
+  color: #2563eb;
+  background: #eff6ff;
+  border-color: #dbeafe;
+}
+
+.dashboard-stat-label {
+  font-size: .9rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.dashboard-stat-card > strong {
+  margin-top: .65rem;
+}
