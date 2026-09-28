@@ -14,13 +14,37 @@ const Dashboard = () => {
       try {
         setLoading(true);
         setError('');
-        const [studentData, statsData] = await Promise.all([getAllStudents(), getEnrollmentStats()]);
-        setStudents(Array.isArray(studentData) ? studentData : []);
-        setStats({
-          totalStudents: statsData?.totalStudents || 0,
-          departmentStats: statsData?.departmentStats || [],
-          yearStats: statsData?.yearStats || [],
-        });
+        const studentData = await getAllStudents();
+        const safeStudents = Array.isArray(studentData) ? studentData : [];
+        setStudents(safeStudents);
+
+        // The student list is the source of truth for the dashboard. This keeps
+        // the dashboard working even if the separate /stats endpoint is unavailable.
+        try {
+          const statsData = await getEnrollmentStats();
+          setStats({
+            totalStudents: Number(statsData?.totalStudents ?? safeStudents.length),
+            departmentStats: Array.isArray(statsData?.departmentStats) ? statsData.departmentStats : [],
+            yearStats: Array.isArray(statsData?.yearStats) ? statsData.yearStats : [],
+          });
+        } catch (statsError) {
+          console.error('Dashboard stats endpoint error:', statsError);
+          const departmentMap = {};
+          const yearMap = {};
+          safeStudents.forEach((student) => {
+            const department = student.department || 'Unknown';
+            const year = student.enrollmentYear || 'Unknown';
+            departmentMap[department] = (departmentMap[department] || 0) + 1;
+            yearMap[year] = (yearMap[year] || 0) + 1;
+          });
+          setStats({
+            totalStudents: safeStudents.length,
+            departmentStats: Object.entries(departmentMap).map(([ _id, count ]) => ({ _id, count })),
+            yearStats: Object.entries(yearMap)
+              .map(([ _id, count ]) => ({ _id, count }))
+              .sort((a, b) => Number(a._id) - Number(b._id)),
+          });
+        }
       } catch (err) {
         console.error('Dashboard loading error:', err);
         setError('Dashboard data could not be loaded. You can still use the student management pages.');
