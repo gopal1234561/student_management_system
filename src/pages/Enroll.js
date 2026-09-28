@@ -106,8 +106,6 @@ const Enroll = () => {
       {error && <div className="alert alert-warning">{error}</div>}
       <div className="enrollment-action-bar"><div><strong>Enrollment Analytics</strong><span>Live overview from students, courses and enrollment records.</span></div><div className="enrollment-action-links"><Link to="/courses" className="btn btn-outline-primary">Manage Courses</Link><Link to="/course-enrollment" className="btn btn-primary">Enroll Student</Link><Link to="/enrollment-history" className="btn btn-outline-secondary">View History</Link></div></div>
 
-      {activeTab === 'analytics' && (
-        <>
           <section className="enrollment-summary-grid">
             <div className="enrollment-summary"><div className="summary-icon">👥</div><div><span>Total students</span><strong>{loading ? '—' : studentData.totalStudents}</strong><small>All student records</small></div></div>
             <div className="enrollment-summary"><div className="summary-icon active-icon">✓</div><div><span>Active students</span><strong>{loading ? '—' : studentData.activeStudents}</strong><small>{activeRate}% active rate</small></div></div>
@@ -135,9 +133,6 @@ const Enroll = () => {
               {courseStats.departmentStats.length ? courseStats.departmentStats.map((item) => <div className="breakdown-row" key={item._id}><span>{normalizeDepartment(item._id)}</span><div className="breakdown-bar enrollment-bar"><i style={{ width: `${courseStats.totalEnrollments ? (item.count / courseStats.totalEnrollments) * 100 : 0}%` }} /></div><strong>{item.count}</strong></div>) : <p className="enrollment-empty compact-empty">No course enrollment data yet.</p>}
             </article>
           </section>
-        </>
-      )}
-
     </main>
   );
 };
