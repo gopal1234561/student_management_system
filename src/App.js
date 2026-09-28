@@ -24,7 +24,16 @@ const App = () => {
       <div className="app">
         <nav className="navbar navbar-expand-lg navbar-dark bg-strong-purple">
           <div className="container">
-            <Link className="navbar-brand" to="/" onClick={closeMenu}>Student Management</Link>
+            <Link className="navbar-brand product-brand" to="/" onClick={closeMenu}>
+              <span className="brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 36 36" role="img">
+                  <rect x="3" y="3" width="30" height="30" rx="9" fill="currentColor" opacity=".14"/>
+                  <path d="M9 12.5 18 8l9 4.5-9 4.5-9-4.5Zm3 4.3v6.2c3.7 2.1 8.3 2.1 12 0v-6.2L18 20l-6-3.2Z" fill="currentColor"/>
+                  <path d="M27 14.5v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </span>
+              <span>Student Management</span>
+            </Link>
             <button
               className="navbar-toggler"
               type="button"
