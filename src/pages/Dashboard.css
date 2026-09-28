@@ -486,3 +486,15 @@ body {
     transform: none;
   }
 }
+
+.dashboard-year-list{display:grid;gap:.65rem;margin-top:1rem}
+.dashboard-year-item{display:flex;justify-content:space-between;align-items:center;padding:.85rem 1rem;border:1px solid #e8ebf3;border-radius:12px;background:#f8faff}
+.dashboard-year-item span{font-weight:700;color:#475569}.dashboard-year-item strong{color:#312e81;font-size:1.15rem}
+.dashboard-student-table-wrap{overflow-x:auto;border:1px solid #e8ebf3;border-radius:12px}
+.dashboard-student-table{min-width:680px}
+.dashboard-student-table th{font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:#64748b;background:#f8fafc;border-bottom:1px solid #e8ebf3}
+.dashboard-student-table td{color:#334155;border-bottom:1px solid #eef2f7}
+.dashboard-student-table td:first-child strong,.dashboard-student-table td:first-child small{display:block}
+.dashboard-student-table td:first-child small{font-size:.75rem;color:#94a3b8;margin-top:.15rem}
+.status-pill{display:inline-flex;align-items:center;padding:.3rem .6rem;border-radius:999px;font-size:.72rem;font-weight:750}
+.status-pill.active{color:#166534;background:#dcfce7}.status-pill.inactive{color:#991b1b;background:#fee2e2}
