@@ -269,3 +269,282 @@ body {
   transform: translateY(-1px);
   box-shadow: 0 5px 12px rgba(30, 41, 59, .12);
 }
+
+
+/* =========================================================
+   Bright Modern Theme Refresh
+   Palette: Ocean Teal + Sky Blue + Warm Amber
+   ========================================================= */
+
+:root {
+  --ui-ink: #17324d;
+  --ui-muted: #61758a;
+  --ui-primary: #087f8c;
+  --ui-primary-strong: #05616c;
+  --ui-secondary: #1687c8;
+  --ui-accent: #f2a93b;
+  --ui-surface: #ffffff;
+  --ui-soft: #f1fbfc;
+  --ui-border: #d8e8ee;
+}
+
+body {
+  background:
+    radial-gradient(circle at 5% 8%, rgba(22, 135, 200, .08), transparent 25rem),
+    radial-gradient(circle at 95% 20%, rgba(8, 127, 140, .07), transparent 24rem),
+    #f6fafc;
+  color: var(--ui-ink);
+}
+
+.navbar,
+.navbar.bg-strong-purple {
+  background: #123b52 !important;
+  border-bottom: 3px solid #22b8c8;
+  box-shadow: 0 8px 24px rgba(18, 59, 82, .16);
+}
+
+.navbar-brand {
+  position: relative;
+  color: #ffffff !important;
+}
+
+.navbar-brand::after {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-left: 7px;
+  vertical-align: middle;
+  border-radius: 50%;
+  background: #f2c14e;
+  box-shadow: 0 0 0 4px rgba(242, 193, 78, .12), 0 0 14px rgba(242, 193, 78, .65);
+  animation: uiTwinkle 2.4s ease-in-out infinite;
+}
+
+.nav-link {
+  color: #d9edf3 !important;
+  border-radius: 9px;
+  padding: .55rem .75rem !important;
+  transition: color .2s ease, background-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.nav-link:hover,
+.nav-link:focus {
+  color: #ffffff !important;
+  background: rgba(34, 184, 200, .14);
+  transform: translateY(-1px);
+  text-shadow: none;
+  box-shadow: 0 0 0 1px rgba(34, 184, 200, .2), 0 0 18px rgba(34, 184, 200, .14);
+}
+
+.btn,
+button,
+a.quick-action,
+.dashboard-feature-grid > div,
+.dashboard-stat-card,
+.dashboard-panel,
+.student-filters,
+.student-table-wrapper,
+.enrollment-summary,
+.enrollment-chart-card,
+.enrollment-breakdown-card,
+.management-card {
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background-color .2s ease;
+}
+
+.btn-primary {
+  background: #087f8c !important;
+  border-color: #087f8c !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background: #05616c !important;
+  border-color: #05616c !important;
+  box-shadow: 0 0 0 3px rgba(8, 127, 140, .12), 0 8px 20px rgba(8, 127, 140, .2);
+  transform: translateY(-2px);
+}
+
+.btn-success {
+  background: #198754 !important;
+  border-color: #198754 !important;
+}
+
+.btn-outline-primary {
+  color: #087f8c !important;
+  border-color: #087f8c !important;
+}
+
+.btn-outline-primary:hover {
+  background: #087f8c !important;
+  color: #fff !important;
+  box-shadow: 0 0 18px rgba(8, 127, 140, .2);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #22a9b8 !important;
+  box-shadow: 0 0 0 .2rem rgba(34, 169, 184, .14) !important;
+}
+
+.student-table-wrapper tbody tr:hover {
+  background: #eef9fb;
+}
+
+.dashboard-hero {
+  background: #087f8c !important;
+  box-shadow: 0 18px 42px rgba(8, 127, 140, .18);
+}
+
+.dashboard-hero .btn-light {
+  color: #087f8c;
+}
+
+.dashboard-stat-card:hover,
+.dashboard-feature-grid > div:hover,
+.dashboard-panel:hover,
+.student-filters:hover,
+.enrollment-summary:hover,
+.enrollment-chart-card:hover,
+.enrollment-breakdown-card:hover,
+.management-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(34, 169, 184, .55);
+  box-shadow: 0 16px 34px rgba(21, 72, 91, .11), 0 0 22px rgba(34, 184, 200, .08);
+}
+
+.dashboard-stat-card strong,
+.dashboard-panel h3,
+.dashboard-feature-grid h5 {
+  color: #173f57;
+}
+
+.dashboard-feature-grid a,
+.quick-action span {
+  color: #087f8c;
+}
+
+.quick-action:hover {
+  color: #05616c;
+  background: #effbfc;
+  border-color: #b9e4e8;
+  box-shadow: 0 12px 26px rgba(21, 72, 91, .1), 0 0 16px rgba(34, 184, 200, .08);
+}
+
+.enrollment-hero {
+  background: #123b52 !important;
+  box-shadow: 0 18px 42px rgba(18, 59, 82, .18);
+}
+
+.enrollment-eyebrow,
+.chart-kicker {
+  color: #72d6df !important;
+}
+
+.enrollment-summary .summary-icon {
+  background: #e5f8fa;
+  color: #087f8c;
+}
+
+.enrollment-summary .active-icon {
+  background: #e7f8ee;
+  color: #198754;
+}
+
+.enrollment-summary .course-icon {
+  background: #fff4dc;
+  color: #b46f08;
+}
+
+.enrollment-summary strong,
+.chart-heading h4,
+.breakdown-row strong {
+  color: #173f57;
+}
+
+.breakdown-bar i {
+  background: #1687c8;
+}
+
+.enrollment-bar i {
+  background: #087f8c;
+}
+
+.status-card {
+  background: #f2fbfc;
+}
+
+@keyframes uiTwinkle {
+  0%, 100% { opacity: .65; transform: scale(.9); }
+  50% { opacity: 1; transform: scale(1.18); }
+}
+
+@keyframes uiShine {
+  0% { opacity: 0; transform: translateX(-120%) rotate(12deg); }
+  35%, 100% { opacity: 0; transform: translateX(140%) rotate(12deg); }
+}
+
+.btn,
+.dashboard-stat-card,
+.dashboard-feature-grid > div,
+.enrollment-summary,
+.enrollment-chart-card,
+.enrollment-breakdown-card,
+.management-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after,
+.dashboard-stat-card::before,
+.dashboard-feature-grid > div::before,
+.enrollment-summary::before,
+.enrollment-chart-card::before,
+.enrollment-breakdown-card::before,
+.management-card::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: -28%;
+  width: 18%;
+  height: 180%;
+  background: rgba(255,255,255,.5);
+  filter: blur(7px);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-120%) rotate(12deg);
+}
+
+.btn:hover::after,
+.dashboard-stat-card:hover::before,
+.dashboard-feature-grid > div:hover::before,
+.enrollment-summary:hover::before,
+.enrollment-chart-card:hover::before,
+.enrollment-breakdown-card:hover::before,
+.management-card:hover::before {
+  animation: uiShine .85s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar-brand::after,
+  .btn::after,
+  .dashboard-stat-card::before,
+  .dashboard-feature-grid > div::before,
+  .enrollment-summary::before,
+  .enrollment-chart-card::before,
+  .enrollment-breakdown-card::before,
+  .management-card::before {
+    animation: none !important;
+  }
+
+  .btn:hover,
+  .dashboard-stat-card:hover,
+  .dashboard-feature-grid > div:hover,
+  .dashboard-panel:hover,
+  .enrollment-summary:hover,
+  .enrollment-chart-card:hover,
+  .enrollment-breakdown-card:hover,
+  .management-card:hover {
+    transform: none;
+  }
+}
