@@ -1,10 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
-import { toast } from 'react-toastify';
 import {
-  createCourse, createEnrollment, deleteCourse, deleteEnrollment, getAllStudents,
-  getCourseEnrollmentStats, getCourses, getEnrollments, updateEnrollment,
+  getAllStudents, getCourseEnrollmentStats, getCourses,
 } from '../api/studentAPI';
 import './Enroll.css';
 
@@ -39,7 +37,6 @@ const emptyCourse = { courseCode: '', courseName: '', department: '', credits: 3
 const emptyEnrollment = { student: '', course: '', academicYear: new Date().getFullYear(), semester: 'Semester 1', status: 'Enrolled' };
 
 const Enroll = () => {
-  const [activeTab, setActiveTab] = useState('analytics');
   const [students, setStudents] = useState([]);
   const [courses, setCourses] = useState([]);
   const [enrollments, setEnrollments] = useState([]);
@@ -47,9 +44,6 @@ const Enroll = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
-  const [courseForm, setCourseForm] = useState(emptyCourse);
-  const [enrollmentForm, setEnrollmentForm] = useState(emptyEnrollment);
-  const [historyFilter, setHistoryFilter] = useState('');
 
   const fetchAll = async () => {
     try {
@@ -97,62 +91,6 @@ const Enroll = () => {
     return enrollments.filter((item) => [item.student?.studentId, item.student?.firstName, item.student?.lastName, item.course?.courseCode, item.course?.courseName, item.status, item.semester, item.academicYear].join(' ').toLowerCase().includes(query));
   }, [enrollments, historyFilter]);
 
-  const handleCourseSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      setSaving(true);
-      await createCourse({ ...courseForm, credits: Number(courseForm.credits) });
-      toast.success('Course added successfully');
-      setCourseForm(emptyCourse);
-      await fetchAll();
-    } catch (err) {
-      toast.error(err.response?.data?.error || 'Failed to add course');
-    } finally { setSaving(false); }
-  };
-
-  const handleDeleteCourse = async (id) => {
-    if (!window.confirm('Delete this course? Courses with enrollment history cannot be deleted.')) return;
-    try {
-      await deleteCourse(id);
-      toast.success('Course deleted');
-      await fetchAll();
-    } catch (err) { toast.error(err.response?.data?.error || 'Failed to delete course'); }
-  };
-
-  const handleEnrollmentSubmit = async (event) => {
-    event.preventDefault();
-    if (!enrollmentForm.student || !enrollmentForm.course) {
-      toast.error('Select both a student and a course');
-      return;
-    }
-    try {
-      setSaving(true);
-      await createEnrollment({ ...enrollmentForm, academicYear: Number(enrollmentForm.academicYear) });
-      toast.success('Student enrolled successfully');
-      setEnrollmentForm(emptyEnrollment);
-      await fetchAll();
-    } catch (err) {
-      toast.error(err.response?.data?.error || 'Failed to create enrollment');
-    } finally { setSaving(false); }
-  };
-
-  const handleStatusChange = async (id, status) => {
-    try {
-      await updateEnrollment(id, { status, ...(status === 'Completed' ? { completedAt: new Date().toISOString() } : { completedAt: null }) });
-      toast.success('Enrollment status updated');
-      await fetchAll();
-    } catch (err) { toast.error(err.response?.data?.error || 'Failed to update enrollment'); }
-  };
-
-  const handleDeleteEnrollment = async (id) => {
-    if (!window.confirm('Delete this enrollment record?')) return;
-    try {
-      await deleteEnrollment(id);
-      toast.success('Enrollment removed');
-      await fetchAll();
-    } catch (err) { toast.error(err.response?.data?.error || 'Failed to remove enrollment'); }
-  };
-
   return (
     <main className="container enrollment-page">
       <header className="enrollment-hero">
@@ -164,13 +102,8 @@ const Enroll = () => {
         <button type="button" className="enrollment-refresh" onClick={fetchAll} disabled={loading}>{loading ? 'Loading…' : '↻ Refresh'}</button>
       </header>
 
-      <nav className="enrollment-tabs" aria-label="Enrollment sections">
-        {[['analytics', 'Analytics'], ['courses', 'Course List'], ['enroll', 'Course Enrollment'], ['history', 'Enrollment History']].map(([key, label]) => (
-          <button key={key} type="button" className={activeTab === key ? 'active' : ''} onClick={() => setActiveTab(key)}>{label}</button>
-        ))}
-      </nav>
-
       {error && <div className="alert alert-warning">{error}</div>}
+      <div className="enrollment-action-bar"><div><strong>Enrollment Analytics</strong><span>Live overview from students, courses and enrollment records.</span></div><div className="enrollment-action-links"><Link to="/courses" className="btn btn-outline-primary">Manage Courses</Link><Link to="/course-enrollment" className="btn btn-primary">Enroll Student</Link><Link to="/enrollment-history" className="btn btn-outline-secondary">View History</Link></div></div>
 
       {activeTab === 'analytics' && (
         <>
@@ -204,42 +137,6 @@ const Enroll = () => {
         </>
       )}
 
-      {activeTab === 'courses' && (
-        <section className="management-grid">
-          <article className="management-card"><div className="chart-heading"><div><span className="chart-kicker">COURSE CATALOG</span><h4>Add Course</h4></div></div>
-            <form className="management-form" onSubmit={handleCourseSubmit}>
-              <input required className="form-control" placeholder="Course code (e.g. CS301)" value={courseForm.courseCode} onChange={(e) => setCourseForm({ ...courseForm, courseCode: e.target.value.toUpperCase() })} />
-              <input required className="form-control" placeholder="Course name" value={courseForm.courseName} onChange={(e) => setCourseForm({ ...courseForm, courseName: e.target.value })} />
-              <input required className="form-control" placeholder="Department (e.g. CSE)" value={courseForm.department} onChange={(e) => setCourseForm({ ...courseForm, department: e.target.value.toUpperCase() })} />
-              <div className="form-row"><input required min="1" max="10" type="number" className="form-control" placeholder="Credits" value={courseForm.credits} onChange={(e) => setCourseForm({ ...courseForm, credits: e.target.value })} /><select className="form-select" value={courseForm.semester} onChange={(e) => setCourseForm({ ...courseForm, semester: e.target.value })}><option>Semester 1</option><option>Semester 2</option><option>Semester 3</option><option>Semester 4</option><option>Semester 5</option><option>Semester 6</option><option>Semester 7</option><option>Semester 8</option></select></div>
-              <button className="btn btn-primary" disabled={saving}>{saving ? 'Saving...' : '+ Add Course'}</button>
-            </form>
-          </article>
-          <article className="management-card course-list-card"><div className="chart-heading"><div><span className="chart-kicker">COURSE LIST</span><h4>{courses.length} Courses</h4></div></div>
-            {courses.length ? <div className="course-list">{courses.map((course) => <div className="course-row" key={course._id}><div><strong>{course.courseCode}</strong><span>{course.courseName}</span><small>{normalizeDepartment(course.department)} · {course.semester}</small></div><div className="course-meta"><b>{course.credits}</b><small>credits</small><button type="button" className="btn btn-sm btn-outline-danger" onClick={() => handleDeleteCourse(course._id)}>Delete</button></div></div>)}</div> : <div className="enrollment-empty course-empty">No courses yet. Add your first course.</div>}
-          </article>
-        </section>
-      )}
-
-      {activeTab === 'enroll' && (
-        <section className="management-card enrollment-form-card"><div className="chart-heading"><div><span className="chart-kicker">COURSE REGISTRATION</span><h4>Enroll a Student</h4></div><span className="chart-badge">{courses.length} courses</span></div>
-          <form className="management-form enrollment-form" onSubmit={handleEnrollmentSubmit}>
-            <label>Student<select required className="form-select" value={enrollmentForm.student} onChange={(e) => setEnrollmentForm({ ...enrollmentForm, student: e.target.value })}><option value="">Select student</option>{students.map((student) => <option key={student._id} value={student._id}>{student.studentId} — {student.firstName} {student.lastName}</option>)}</select></label>
-            <label>Course<select required className="form-select" value={enrollmentForm.course} onChange={(e) => setEnrollmentForm({ ...enrollmentForm, course: e.target.value })}><option value="">Select course</option>{courses.map((course) => <option key={course._id} value={course._id}>{course.courseCode} — {course.courseName} ({course.credits} credits)</option>)}</select></label>
-            <label>Academic year<input required type="number" min="2000" max="2100" className="form-control" value={enrollmentForm.academicYear} onChange={(e) => setEnrollmentForm({ ...enrollmentForm, academicYear: e.target.value })} /></label>
-            <label>Semester<select className="form-select" value={enrollmentForm.semester} onChange={(e) => setEnrollmentForm({ ...enrollmentForm, semester: e.target.value })}><option>Semester 1</option><option>Semester 2</option><option>Semester 3</option><option>Semester 4</option><option>Semester 5</option><option>Semester 6</option><option>Semester 7</option><option>Semester 8</option></select></label>
-            <label>Status<select className="form-select" value={enrollmentForm.status} onChange={(e) => setEnrollmentForm({ ...enrollmentForm, status: e.target.value })}><option>Enrolled</option><option>Completed</option><option>Dropped</option></select></label>
-            <button className="btn btn-primary enrollment-submit" disabled={saving}>{saving ? 'Enrolling...' : 'Enroll Student'}</button>
-          </form>
-        </section>
-      )}
-
-      {activeTab === 'history' && (
-        <section className="management-card history-card"><div className="chart-heading"><div><span className="chart-kicker">AUDIT TRAIL</span><h4>Enrollment History</h4></div><span className="chart-badge">{filteredHistory.length} records</span></div>
-          <input className="form-control history-search" placeholder="Search student, course, status, semester or year..." value={historyFilter} onChange={(e) => setHistoryFilter(e.target.value)} />
-          {filteredHistory.length ? <div className="table-responsive enrollment-history-table"><table className="table align-middle"><thead><tr><th>Student</th><th>Course</th><th>Credits</th><th>Semester</th><th>Year</th><th>Status</th><th>Action</th></tr></thead><tbody>{filteredHistory.map((item) => <tr key={item._id}><td><strong>{item.student?.studentId}</strong><small>{item.student?.firstName} {item.student?.lastName}</small></td><td><strong>{item.course?.courseCode}</strong><small>{item.course?.courseName}</small></td><td>{item.course?.credits ?? '—'}</td><td>{item.semester}</td><td>{item.academicYear}</td><td><select className={`status-select status-${String(item.status).toLowerCase()}`} value={item.status} onChange={(e) => handleStatusChange(item._id, e.target.value)}><option>Enrolled</option><option>Completed</option><option>Dropped</option></select></td><td><button type="button" className="btn btn-sm btn-outline-danger" onClick={() => handleDeleteEnrollment(item._id)}>Remove</button></td></tr>)}</tbody></table></div> : <div className="enrollment-empty history-empty">No enrollment records found.</div>}
-        </section>
-      )}
     </main>
   );
 };
