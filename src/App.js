@@ -7,6 +7,7 @@ import StudentList from './pages/StudentList';
 import AddStudent from './pages/AddStudent';
 import EditStudent from './pages/EditStudent';
 import Enroll from './pages/Enroll';
+import StudentDetails from './pages/StudentDetails';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import Footer from './Footer';
@@ -44,6 +45,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/students" element={<StudentList />} />
+          <Route path="/students/:id" element={<StudentDetails />} />
           <Route path="/add-student" element={<AddStudent />} />
           <Route path="/edit-student/:id" element={<EditStudent />} />
           <Route path="/Enroll" element={<Enroll />} />
