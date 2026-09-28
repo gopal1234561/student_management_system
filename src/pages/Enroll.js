@@ -68,23 +68,8 @@ const Enroll = () => {
     labels: enrollment.departments.map((item) => item.name),
     datasets: [{
       data: enrollment.departments.map((item) => item.count),
-      backgroundColor: (context) => {
-        const chart = context.chart;
-        const { ctx, chartArea } = chart;
-        if (!chartArea) return ['#6366f1', '#8b5cf6', '#06b6d4', '#14b8a6', '#f59e0b', '#ec4899'];
-        const gradient = ctx.createLinearGradient(chartArea.left, chartArea.top, chartArea.right, chartArea.bottom);
-        gradient.addColorStop(0, '#4f46e5');
-        gradient.addColorStop(0.45, '#8b5cf6');
-        gradient.addColorStop(1, '#2dd4bf');
-        return enrollment.departments.map((_, index) => {
-          const offset = index / Math.max(enrollment.departments.length - 1, 1);
-          const segment = ctx.createLinearGradient(chartArea.left, chartArea.top, chartArea.right, chartArea.bottom);
-          segment.addColorStop(0, index % 2 ? '#7c3aed' : '#4f46e5');
-          segment.addColorStop(offset < 0.5 ? 0.55 : 0.45, '#8b5cf6');
-          segment.addColorStop(1, index % 2 ? '#06b6d4' : '#2dd4bf');
-          return segment;
-        });
-      },
+      backgroundColor: ['#6366f1', '#14b8a6', '#f59e0b', '#ec4899', '#06b6d4', '#8b5cf6', '#ef4444', '#22c55e'],
+      hoverBackgroundColor: ['#4f46e5', '#0f766e', '#d97706', '#db2777', '#0891b2', '#7c3aed', '#dc2626', '#16a34a'],
       borderColor: '#ffffff',
       borderWidth: 3,
     }],
