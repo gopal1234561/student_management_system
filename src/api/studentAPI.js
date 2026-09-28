@@ -22,3 +22,43 @@ export const getEnrollmentStats = async () => {
   const response = await axios.get(`${API_URL}/stats`);
   return response.data;
 };
+
+export const getCourses = async () => {
+  const response = await axios.get(`${API_URL}/courses`);
+  return response.data;
+};
+
+export const createCourse = async (course) => {
+  const response = await axios.post(`${API_URL}/courses`, course);
+  return response.data;
+};
+
+export const deleteCourse = async (id) => {
+  await axios.delete(`${API_URL}/courses/${id}`);
+  return true;
+};
+
+export const getEnrollments = async () => {
+  const response = await axios.get(`${API_URL}/enrollments`);
+  return response.data;
+};
+
+export const createEnrollment = async (enrollment) => {
+  const response = await axios.post(`${API_URL}/enrollments`, enrollment);
+  return response.data;
+};
+
+export const updateEnrollment = async (id, enrollment) => {
+  const response = await axios.put(`${API_URL}/enrollments/${id}`, enrollment);
+  return response.data;
+};
+
+export const deleteEnrollment = async (id) => {
+  await axios.delete(`${API_URL}/enrollments/${id}`);
+  return true;
+};
+
+export const getCourseEnrollmentStats = async () => {
+  const response = await axios.get(`${API_URL}/enrollment-stats`);
+  return response.data;
+};
