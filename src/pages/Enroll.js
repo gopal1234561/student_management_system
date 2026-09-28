@@ -45,7 +45,7 @@ const Enroll = () => {
   if (loading) return <main className="container enrollment-page">Loading enrollment data...</main>;
 
   return (
-    <div className="container mt-5">
+    <main className="container enrollment-page">
       <header className="enrollment-hero">
         <div><span className="enrollment-eyebrow">STUDENT ANALYTICS</span><h2>Track Enrollment</h2><p>Monitor student enrollment and explore department and academic-year trends.</p></div>
         <div className="enrollment-hero-icon" aria-hidden="true">↗</div>
