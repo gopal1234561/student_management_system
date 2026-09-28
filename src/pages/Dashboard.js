@@ -11,30 +11,6 @@ const normalizeDepartment = (value) => {
   return names[key] || department.toUpperCase();
 };
 
-const buildStats = (students) => {
-  const departmentMap = {};
-  const yearMap = {};
-
-  students.forEach((student) => {
-    const department = normalizeDepartment(student.department);
-    const year = student.enrollmentYear || 'Unknown';
-    departmentMap[department] = (departmentMap[department] || 0) + 1;
-    yearMap[year] = (yearMap[year] || 0) + 1;
-  });
-
-  return {
-    totalStudents: students.length,
-    activeStudents: students.filter((student) => Boolean(student.isActive)).length,
-    inactiveStudents: students.filter((student) => !student.isActive).length,
-    departmentStats: Object.entries(departmentMap)
-      .map(([name, count]) => ({ name, count }))
-      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name)),
-    yearStats: Object.entries(yearMap)
-      .map(([year, count]) => ({ year, count }))
-      .sort((a, b) => Number(a.year) - Number(b.year)),
-  };
-};
-
 const Dashboard = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
