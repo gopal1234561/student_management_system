@@ -1,60 +1,161 @@
-import React, { useEffect, useState } from 'react';
-import { Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { getEnrollmentStats } from '../api/studentAPI';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Bar, Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
+import { getAllStudents } from '../api/studentAPI';
 import './Enroll.css';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+
+const normalizeDepartment = (value) => {
+  const department = String(value || 'Unknown').trim();
+  if (!department) return 'Unknown';
+  const names = { cse: 'CSE', ece: 'ECE', it: 'IT', aiml: 'AIML', cs: 'CS', mech: 'MECH', civil: 'CIVIL' };
+  return names[department.toLowerCase()] || department.toUpperCase();
+};
+
+const buildEnrollmentData = (students) => {
+  const departments = {};
+  const years = {};
+
+  students.forEach((student) => {
+    const department = normalizeDepartment(student.department);
+    const year = student.enrollmentYear || 'Unknown';
+    departments[department] = (departments[department] || 0) + 1;
+    years[year] = (years[year] || 0) + 1;
+  });
+
+  return {
+    totalStudents: students.length,
+    activeStudents: students.filter((student) => Boolean(student.isActive)).length,
+    inactiveStudents: students.filter((student) => !student.isActive).length,
+    departments: Object.entries(departments)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name)),
+    years: Object.entries(years)
+      .map(([year, count]) => ({ year, count }))
+      .sort((a, b) => Number(a.year) - Number(b.year)),
+  };
+};
 
 const Enroll = () => {
-  const [enrollmentStats, setEnrollmentStats] = useState({
-    totalStudents: 0, departmentStats: [], yearStats: [],
-  });
+  const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
+
+  const fetchEnrollment = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      const data = await getAllStudents();
+      if (!Array.isArray(data)) throw new Error('Unexpected student API response.');
+      setStudents(data);
+    } catch (err) {
+      console.error('Enrollment loading error:', err);
+      setStudents([]);
+      setError('Unable to load enrollment data. Please refresh and try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const data = await getEnrollmentStats();
-        setEnrollmentStats({
-          totalStudents: data.totalStudents || 0,
-          departmentStats: data.departmentStats || [],
-          yearStats: data.yearStats || [],
-        });
-      } catch (err) {
-        setError('Failed to fetch enrollment stats. Please try again later.');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchStats();
+    fetchEnrollment();
   }, []);
 
-  const departmentData = {
-    labels: enrollmentStats.departmentStats.map(item => item._id),
-    datasets: [{ data: enrollmentStats.departmentStats.map(item => item.count) }],
+  const enrollment = useMemo(() => buildEnrollmentData(students), [students]);
+
+  const departmentChart = {
+    labels: enrollment.departments.map((item) => item.name),
+    datasets: [{
+      data: enrollment.departments.map((item) => item.count),
+      borderWidth: 2,
+    }],
   };
 
-  const yearData = {
-    labels: enrollmentStats.yearStats.map(item => item._id),
-    datasets: [{ data: enrollmentStats.yearStats.map(item => item.count) }],
+  const yearChart = {
+    labels: enrollment.years.map((item) => String(item.year)),
+    datasets: [{
+      label: 'Students',
+      data: enrollment.years.map((item) => item.count),
+      borderRadius: 8,
+      borderWidth: 0,
+    }],
   };
 
-  if (loading) return <main className="container enrollment-page">Loading enrollment data...</main>;
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 18 } } },
+  };
+
+  const barOptions = {
+    ...chartOptions,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, ticks: { precision: 0 } },
+      x: { grid: { display: false } },
+    },
+  };
 
   return (
     <main className="container enrollment-page">
       <header className="enrollment-hero">
-        <div><span className="enrollment-eyebrow">STUDENT ANALYTICS</span><h2>Track Enrollment</h2><p>Monitor student enrollment and explore department and academic-year trends.</p></div>
-        <div className="enrollment-hero-icon" aria-hidden="true">↗</div>
+        <div>
+          <span className="enrollment-eyebrow">STUDENT ANALYTICS</span>
+          <h2>Track Enrollment</h2>
+          <p>Explore live student enrollment by department and academic year.</p>
+        </div>
+        <button type="button" className="enrollment-refresh" onClick={fetchEnrollment} disabled={loading}>
+          {loading ? 'Loading…' : '↻ Refresh'}
+        </button>
       </header>
-      {error && <div className="alert alert-danger">{error}</div>}
-      <section className="enrollment-summary"><div className="summary-icon">👥</div><div><span>Total students enrolled</span><strong>{enrollmentStats.totalStudents}</strong><small>Across all departments and years</small></div></section>
+
+      {error && <div className="alert alert-warning">{error}</div>}
+
+      <section className="enrollment-summary-grid">
+        <div className="enrollment-summary"><div className="summary-icon">👥</div><div><span>Total students</span><strong>{loading ? '—' : enrollment.totalStudents}</strong><small>All student records</small></div></div>
+        <div className="enrollment-summary"><div className="summary-icon">✓</div><div><span>Active students</span><strong>{loading ? '—' : enrollment.activeStudents}</strong><small>Currently active</small></div></div>
+        <div className="enrollment-summary"><div className="summary-icon">○</div><div><span>Inactive students</span><strong>{loading ? '—' : enrollment.inactiveStudents}</strong><small>Currently inactive</small></div></div>
+      </section>
+
       <section className="enrollment-charts">
-        <article className="enrollment-chart-card"><div className="chart-heading"><div><span className="chart-kicker">DISTRIBUTION</span><h4>By Department</h4></div><span className="chart-badge">Departments</span></div><div className="enrollment-chart">{enrollmentStats.totalStudents > 0 && enrollmentStats.departmentStats.length > 0 ? <Pie data={departmentData} options={{ maintainAspectRatio: false, plugins: { legend: { position: "bottom", labels: { usePointStyle: true, padding: 18 } } } }} /> : <p className="enrollment-empty">No department data available yet.</p>}</div></article>
-        <article className="enrollment-chart-card"><div className="chart-heading"><div><span className="chart-kicker">YEARLY OVERVIEW</span><h4>By Academic Year</h4></div><span className="chart-badge">Year groups</span></div><div className="enrollment-chart">{enrollmentStats.totalStudents > 0 && enrollmentStats.yearStats.length > 0 ? <Pie data={yearData} options={{ maintainAspectRatio: false, plugins: { legend: { position: "bottom", labels: { usePointStyle: true, padding: 18 } } } }} /> : <p className="enrollment-empty">No academic-year data available yet.</p>}</div></article>
+        <article className="enrollment-chart-card">
+          <div className="chart-heading"><div><span className="chart-kicker">DISTRIBUTION</span><h4>By Department</h4></div><span className="chart-badge">{enrollment.departments.length} groups</span></div>
+          <div className="enrollment-chart">
+            {enrollment.departments.length ? <Doughnut data={departmentChart} options={chartOptions} /> : <p className="enrollment-empty">{loading ? 'Loading...' : 'No department data available.'}</p>}
+          </div>
+        </article>
+
+        <article className="enrollment-chart-card">
+          <div className="chart-heading"><div><span className="chart-kicker">YEARLY OVERVIEW</span><h4>By Academic Year</h4></div><span className="chart-badge">{enrollment.years.length} years</span></div>
+          <div className="enrollment-chart">
+            {enrollment.years.length ? <Bar data={yearChart} options={barOptions} /> : <p className="enrollment-empty">{loading ? 'Loading...' : 'No academic-year data available.'}</p>}
+          </div>
+        </article>
+      </section>
+
+      <section className="enrollment-breakdown-grid">
+        <article className="enrollment-breakdown-card">
+          <div className="chart-heading"><div><span className="chart-kicker">DEPARTMENT BREAKDOWN</span><h4>Students by Department</h4></div></div>
+          {enrollment.departments.map((item) => (
+            <div className="breakdown-row" key={item.name}>
+              <span>{item.name}</span>
+              <div className="breakdown-bar"><i style={{ width: `${enrollment.totalStudents ? (item.count / enrollment.totalStudents) * 100 : 0}%` }} /></div>
+              <strong>{item.count}</strong>
+            </div>
+          ))}
+        </article>
+
+        <article className="enrollment-breakdown-card">
+          <div className="chart-heading"><div><span className="chart-kicker">YEAR BREAKDOWN</span><h4>Students by Enrollment Year</h4></div></div>
+          {enrollment.years.map((item) => (
+            <div className="breakdown-row" key={item.year}>
+              <span>{item.year}</span>
+              <div className="breakdown-bar"><i style={{ width: `${enrollment.totalStudents ? (item.count / enrollment.totalStudents) * 100 : 0}%` }} /></div>
+              <strong>{item.count}</strong>
+            </div>
+          ))}
+        </article>
       </section>
     </main>
   );
