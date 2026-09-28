@@ -72,10 +72,10 @@ const Dashboard = () => {
 
         <div className="row g-3 mb-4">
           {[
-            ['Total Students', stats.totalStudents, 'All records'],
-            ['Active Students', stats.activeStudents, 'Currently active'],
-            ['Inactive Students', stats.inactiveStudents, 'Currently inactive'],
-            ['Departments', stats.departmentStats.length, 'Unique departments'],
+            ['Total Students', stats.total, 'All records'],
+            ['Active Students', stats.active, 'Currently active'],
+            ['Inactive Students', stats.inactive, 'Currently inactive'],
+            ['Departments', stats.departments, 'Unique departments'],
           ].map(([label, value, caption]) => (
             <div className="col-12 col-sm-6 col-xl-3" key={label}>
               <div className="dashboard-stat-card">
