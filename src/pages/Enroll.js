@@ -34,28 +34,22 @@ const buildStudentData = (students) => {
   };
 };
 
-const emptyCourse = { courseCode: '', courseName: '', department: '', credits: 3, semester: 'Semester 1' };
-const emptyEnrollment = { student: '', course: '', academicYear: new Date().getFullYear(), semester: 'Semester 1', status: 'Enrolled' };
-
 const Enroll = () => {
   const [students, setStudents] = useState([]);
   const [courses, setCourses] = useState([]);
-  const [enrollments, setEnrollments] = useState([]);
   const [courseStats, setCourseStats] = useState({ totalEnrollments: 0, statusStats: [], departmentStats: [], semesterStats: [] });
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
   const fetchAll = async () => {
     try {
       setLoading(true);
       setError('');
-      const [studentData, courseData, enrollmentData, statsData] = await Promise.all([
-        getAllStudents(), getCourses(), getEnrollments(), getCourseEnrollmentStats(),
+      const [studentData, courseData, statsData] = await Promise.all([
+        getAllStudents(), getCourses(), getCourseEnrollmentStats(),
       ]);
       setStudents(Array.isArray(studentData) ? studentData : []);
       setCourses(Array.isArray(courseData) ? courseData : []);
-      setEnrollments(Array.isArray(enrollmentData) ? enrollmentData : []);
       setCourseStats(statsData || { totalEnrollments: 0, statusStats: [], departmentStats: [], semesterStats: [] });
     } catch (err) {
       console.error('Enrollment management loading error:', err);
