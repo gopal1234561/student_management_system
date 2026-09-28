@@ -1,68 +1,241 @@
+.add-student-page {
+  min-height: calc(100vh - 72px);
+  padding: 42px 18px 64px;
+}
+
 .add-student-container {
-    max-width: 300px;
-    margin: 40px auto;
-    padding: 30px;
-    background-color: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  } 
-  .add-student-container h2 {
-    text-align: center;
-    margin-bottom: 24px;
-    color: #ff6b00;
-    font-weight: 700;
+  width: min(920px, 100%);
+  margin: 0 auto;
+}
+
+.add-student-header {
+  margin-bottom: 24px;
+}
+
+.add-student-kicker {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: #6c5ce7;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.add-student-header h1 {
+  margin: 0;
+  color: #172033;
+  font-size: clamp(1.8rem, 4vw, 2.35rem);
+  font-weight: 800;
+}
+
+.add-student-header p {
+  max-width: 680px;
+  margin: 8px 0 0;
+  color: #687386;
+}
+
+.add-student-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.student-form-section {
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(108, 92, 231, 0.12);
+  border-radius: 18px;
+  box-shadow: 0 10px 28px rgba(28, 38, 70, 0.07);
+}
+
+.student-form-section-heading {
+  margin-bottom: 20px;
+}
+
+.student-form-section-heading > div,
+.student-status-copy {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.student-form-section-heading > div > span {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  border-radius: 10px;
+  background: #f0edff;
+  color: #5b4bd8;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.student-form-section h2,
+.student-status-copy h2 {
+  margin: 0;
+  color: #202a3d;
+  font-size: 1.05rem;
+  font-weight: 750;
+}
+
+.student-form-section-heading p,
+.student-status-copy p {
+  margin: 4px 0 0;
+  color: #7a8496;
+  font-size: 0.88rem;
+}
+
+.student-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.student-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.student-field label {
+  color: #354052;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.student-field label span {
+  color: #dc3545;
+}
+
+.student-field input,
+.student-field select {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 13px;
+  border: 1px solid #d9deea;
+  border-radius: 10px;
+  background: #fff;
+  color: #202a3d;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.student-field input::placeholder {
+  color: #a0a8b7;
+}
+
+.student-field input:focus,
+.student-field select:focus {
+  border-color: #7567e8;
+  box-shadow: 0 0 0 3px rgba(117, 103, 232, 0.12);
+}
+
+.student-status-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.student-status-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  place-items: center;
+  border-radius: 50%;
+  background: #eaf8ef;
+  color: #198754;
+  font-weight: 800;
+}
+
+.student-active-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: #263247;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.student-active-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.student-toggle-track {
+  display: flex;
+  align-items: center;
+  width: 46px;
+  height: 26px;
+  padding: 3px;
+  border-radius: 999px;
+  background: #cbd2df;
+  transition: background .2s ease;
+}
+
+.student-toggle-track span {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,.15);
+  transition: transform .2s ease;
+}
+
+.student-active-toggle input:checked + .student-toggle-track {
+  background: #198754;
+}
+
+.student-active-toggle input:checked + .student-toggle-track span {
+  transform: translateX(20px);
+}
+
+.add-student-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+.add-student-actions .btn {
+  min-width: 130px;
+  min-height: 44px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .add-student-page {
+    padding: 28px 14px 48px;
   }
-  
-  .add-student-container form {
-    display: flex;
+
+  .student-form-section {
+    padding: 18px;
+  }
+
+  .student-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .student-status-section {
+    align-items: flex-start;
     flex-direction: column;
   }
-  
-  .add-student-container input,
-  .add-student-container select {
-    margin-bottom: 15px;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: 0.3s ease;
+
+  .student-active-toggle {
+    align-self: stretch;
   }
-  
-  .add-student-container input:focus,
-  .add-student-container select:focus {
-    border-color: #ff6b00;
-    outline: none;
+
+  .add-student-actions {
+    flex-direction: column-reverse;
   }
-  
-  .form-check {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
+
+  .add-student-actions .btn {
+    width: 100%;
   }
-  
-  .form-check input[type='checkbox'] {
-    margin-right: 10px;
-    width: 18px;
-    height: 18px;
-  }
-  
-  .form-check label {
-    font-size: 16px;
-    color:green;
-  }
-  
-  .add-student-container button {
-    background-color: #ff6b00;
-    color: white;
-    border: none;
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .add-student-container button:hover {
-    background-color: #e65c00;
-  }
-  
+}
