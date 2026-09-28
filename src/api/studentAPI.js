@@ -33,7 +33,12 @@ export const createCourse = async (course) => {
   return response.data;
 };
 
-export const updateCourse = async (id, course) => {\n  const response = await axios.put(`${API_URL}/courses/${id}`, course);\n  return response.data;\n};\n\nexport const deleteCourse = async (id) => {
+export const updateCourse = async (id, course) => {
+  const response = await axios.put(`${API_URL}/courses/${id}`, course);
+  return response.data;
+};
+
+export const deleteCourse = async (id) => {
   await axios.delete(`${API_URL}/courses/${id}`);
   return true;
 };
