@@ -1,34 +1,67 @@
-
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { getAllStudents, deleteStudent } from '../api/studentAPI';
+
 const StudentList = () => {
   const [students, setStudents] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredStudents, setFilteredStudents] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
+
   const fetchStudents = async () => {
-    const data = await getAllStudents();
-    setStudents(data);
-    setFilteredStudents(data); 
+    setIsLoading(true);
+    setLoadError('');
+    try {
+      const data = await getAllStudents();
+      if (!Array.isArray(data)) {
+        throw new Error('Unexpected response from the server.');
+      }
+      setStudents(data);
+      const query = searchQuery.trim().toLowerCase();
+      setFilteredStudents(query ? data.filter((stu) => {
+        const searchableText = [
+          stu.firstName,
+          stu.lastName,
+          stu.studentId,
+          stu.enrollmentYear,
+        ].map((value) => String(value ?? '').toLowerCase());
+        return searchableText.some((value) => value.includes(query));
+      }) : data);
+    } catch (error) {
+      console.error('Unable to load students:', error);
+      setLoadError('Unable to load students. Please check your connection and try again.');
+      setStudents([]);
+      setFilteredStudents([]);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
   useEffect(() => {
     fetchStudents();
+    // Fetch once when the page mounts.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
+
   const handleSearchClick = () => {
+    const query = searchQuery.trim().toLowerCase();
     const filteredData = students.filter((stu) => {
-      return (
-        stu.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        stu.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        stu.studentId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        stu.enrollmentYear.toString().includes(searchQuery.toLowerCase())
-      );
+      const searchableText = [
+        stu.firstName,
+        stu.lastName,
+        stu.studentId,
+        stu.enrollmentYear,
+      ].map((value) => String(value ?? '').toLowerCase());
+      return searchableText.some((value) => value.includes(query));
     });
-    setFilteredStudents(filteredData); 
+    setFilteredStudents(filteredData);
   };
 
   const handleDelete = async (id) => {
@@ -36,8 +69,9 @@ const StudentList = () => {
       try {
         await deleteStudent(id);
         toast.success('Student deleted');
-        fetchStudents(); 
+        await fetchStudents();
       } catch (error) {
+        console.error('Unable to delete student:', error);
         toast.error('Failed to delete student');
       }
     }
@@ -58,13 +92,30 @@ const StudentList = () => {
         <button
           className="btn btn-primary"
           onClick={handleSearchClick}
+          disabled={isLoading}
         >
           Search
         </button>
+        <button
+          className="btn btn-outline-secondary ms-2"
+          onClick={fetchStudents}
+          disabled={isLoading}
+        >
+          {isLoading ? 'Loading...' : 'Refresh'}
+        </button>
       </div>
-      
-      {filteredStudents.length === 0 ? (
-        <p>No students found.</p>
+
+      {isLoading ? (
+        <p role="status">Loading students...</p>
+      ) : loadError ? (
+        <div className="alert alert-danger" role="alert">
+          <p className="mb-2">{loadError}</p>
+          <button className="btn btn-sm btn-outline-danger" onClick={fetchStudents}>
+            Try again
+          </button>
+        </div>
+      ) : filteredStudents.length === 0 ? (
+        <p>{students.length === 0 ? 'No students have been added yet.' : 'No students match your search.'}</p>
       ) : (
         <table className="table table-striped table-hover shadow-sm rounded">
           <thead className="table-dark">
