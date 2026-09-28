@@ -11,6 +11,16 @@ const normalizeDepartment = (value) => {
   return names[key] || department.toUpperCase();
 };
 
+const StatIcon = ({ type }) => {
+  const paths = {
+    students: <><circle cx="12" cy="8" r="3.2" /><path d="M5.5 19c.6-3.1 2.9-5 6.5-5s5.9 1.9 6.5 5" /><path d="M18 6.5a3 3 0 0 1 0 5.7" /><path d="M20 14.2c1.3 1 2 2.3 2.3 4" /></>,
+    active: <><circle cx="10.5" cy="8" r="3.2" /><path d="M4 19c.6-3.1 2.9-5 6.5-5 2.1 0 3.8.6 5 1.8" /><path d="m16 17 2 2 4-4" /></>,
+    inactive: <><circle cx="12" cy="8" r="3.2" /><path d="M5.5 19c.6-3.1 2.9-5 6.5-5s5.9 1.9 6.5 5" /><path d="M16.5 8.5h5" /></>,
+    departments: <><rect x="5" y="4" width="14" height="17" rx="2" /><path d="M9 8h2M13 8h2M9 12h2M13 12h2M9 16h2M13 16h2M11 21v-3h2v3" /></>
+  };
+  return <span className={"dashboard-stat-icon dashboard-stat-icon-" + type} aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{paths[type]}</svg></span>;
+};
+
 const Dashboard = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -72,14 +82,17 @@ const Dashboard = () => {
 
         <div className="row g-3 mb-4">
           {[
-            ['Total Students', stats.total, 'All records'],
-            ['Active Students', stats.active, 'Currently active'],
-            ['Inactive Students', stats.inactive, 'Currently inactive'],
-            ['Departments', stats.departments, 'Unique departments'],
-          ].map(([label, value, caption]) => (
+            ['Total Students', stats.total, 'All records', 'students'],
+            ['Active Students', stats.active, 'Currently active', 'active'],
+            ['Inactive Students', stats.inactive, 'Currently inactive', 'inactive'],
+            ['Departments', stats.departments, 'Unique departments', 'departments'],
+          ].map(([label, value, caption, icon]) => (
             <div className="col-12 col-sm-6 col-xl-3" key={label}>
               <div className="dashboard-stat-card">
-                <span>{label}</span>
+                <div className="dashboard-stat-top">
+                  <StatIcon type={icon} />
+                  <span className="dashboard-stat-label">{label}</span>
+                </div>
                 <strong>{loading ? '—' : value}</strong>
                 <small>{caption}</small>
               </div>
