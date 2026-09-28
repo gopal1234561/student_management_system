@@ -18,3 +18,47 @@
 .enrollment-page .alert{border-radius:12px;font-size:.95rem}
 @media(max-width:767px){.enrollment-page{padding:1.25rem 1rem 2.5rem}.enrollment-summary-grid,.enrollment-charts,.enrollment-breakdown-grid{grid-template-columns:1fr}.enrollment-chart{height:290px}.enrollment-hero{align-items:flex-start;flex-direction:column}.enrollment-refresh{align-self:flex-end}}
 @media(max-width:420px){.enrollment-hero{border-radius:18px}.enrollment-summary{padding:1rem}.enrollment-chart-card,.enrollment-breakdown-card{padding:1rem}.chart-badge{font-size:.62rem}}
+
+
+/* Gradient treatment for distribution and yearly overview */
+.enrollment-chart-card:first-child {
+  background:
+    radial-gradient(circle at 8% 10%, rgba(99,102,241,.12), transparent 38%),
+    linear-gradient(145deg, #ffffff 0%, #f5f3ff 52%, #ecfeff 100%);
+  border-color: rgba(129,140,248,.28);
+}
+
+.enrollment-chart-card:nth-child(2) {
+  background:
+    radial-gradient(circle at 92% 8%, rgba(45,212,191,.13), transparent 38%),
+    linear-gradient(145deg, #ffffff 0%, #eef2ff 50%, #ecfdf5 100%);
+  border-color: rgba(45,212,191,.24);
+}
+
+.enrollment-chart-card:first-child .chart-badge {
+  background: linear-gradient(100deg, #ede9fe, #dbeafe, #ccfbf1);
+  color: #4338ca;
+  border: 1px solid rgba(99,102,241,.16);
+}
+
+.enrollment-chart-card:nth-child(2) .chart-badge {
+  background: linear-gradient(100deg, #e0e7ff, #cffafe, #d1fae5);
+  color: #0f766e;
+  border: 1px solid rgba(20,184,166,.16);
+}
+
+.enrollment-chart-card .chart-kicker {
+  background: linear-gradient(90deg, #4f46e5, #7c3aed, #0d9488);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.enrollment-chart-card {
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.enrollment-chart-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px rgba(49,46,129,.11);
+}
