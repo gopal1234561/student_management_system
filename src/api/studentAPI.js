@@ -8,6 +8,11 @@ export const getAllStudents = async () => {
   return response.data;
 };
 
+export const getStudentById = async (id) => {
+  const response = await axios.get(`${BASE_URL}/${id}`);
+  return response.data;
+};
+
 export const deleteStudent = async (id) => {
   await axios.delete(`${BASE_URL}/${id}`);
   return true;
