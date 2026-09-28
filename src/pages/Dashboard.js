@@ -62,7 +62,13 @@ const Dashboard = () => {
     loadDashboard();
   }, []);
 
-  const stats = useMemo(() => buildStats(students), [students]);
+  const stats = useMemo(() => ({
+    total: students.length,
+    active: students.filter((student) => Boolean(student.isActive)).length,
+    inactive: students.filter((student) => !student.isActive).length,
+    departments: new Set(students.map((student) => normalizeDepartment(student.department))).size,
+    years: new Set(students.map((student) => student.enrollmentYear).filter(Boolean)).size,
+  }), [students]);
   const recentStudents = useMemo(
     () => [...students].sort((a, b) => new Date(b.updatedAt || b.createdAt || 0) - new Date(a.updatedAt || a.createdAt || 0)).slice(0, 5),
     [students]
@@ -75,7 +81,7 @@ const Dashboard = () => {
           <div className="dashboard-hero-content">
             <span className="dashboard-kicker">Student Administration</span>
             <h1>Student Management Dashboard</h1>
-            <p>Monitor student records, enrollment, and active status from one place.</p>
+            <p>Get a quick overview of your student records and jump into detailed management or enrollment analytics.</p>
             <div className="d-flex flex-wrap justify-content-center gap-2">
               <Link to="/students" className="btn btn-light">View Students</Link>
               <Link to="/add-student" className="btn btn-outline-light">+ Add Student</Link>
@@ -106,89 +112,50 @@ const Dashboard = () => {
         </div>
 
         <div className="row g-4">
-          <div className="col-12 col-lg-7">
+          <div className="col-12 col-lg-8">
             <div className="dashboard-panel h-100">
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <div>
-                  <h3>Enrollment by Department</h3>
-                  <p>Distribution calculated directly from the student records.</p>
+                  <span className="dashboard-section-kicker">RECENT ACTIVITY</span>
+                  <h3>Recent Student Records</h3>
+                  <p>Quick access to the latest student records.</p>
                 </div>
-                <Link to="/Enroll" className="btn btn-sm btn-outline-primary">Track enrollment</Link>
+                <Link to="/students" className="btn btn-sm btn-outline-primary">View all</Link>
               </div>
-              {loading ? <p className="text-muted">Loading student records...</p> : stats.departmentStats.length ? (
-                <div className="dashboard-list">
-                  {stats.departmentStats.map((item) => {
-                    const percentage = stats.totalStudents ? Math.round((item.count / stats.totalStudents) * 100) : 0;
-                    return (
-                      <div className="dashboard-list-item" key={item.name}>
-                        <div className="d-flex justify-content-between">
-                          <strong>{item.name}</strong>
-                          <span>{item.count} ({percentage}%)</span>
-                        </div>
-                        <div className="progress mt-2" role="progressbar" aria-label={item.name} aria-valuenow={percentage} aria-valuemin="0" aria-valuemax="100">
-                          <div className="progress-bar" style={{ width: `${percentage}%` }} />
-                        </div>
-                      </div>
-                    );
-                  })}
+              {loading ? <p className="text-muted">Loading records...</p> : recentStudents.length ? (
+                <div className="dashboard-student-table-wrap">
+                  <table className="table dashboard-student-table align-middle mb-0">
+                    <thead><tr><th>Student</th><th>ID</th><th>Department</th><th>Status</th></tr></thead>
+                    <tbody>
+                      {recentStudents.map((student) => (
+                        <tr key={student._id || student.studentId}>
+                          <td><strong>{student.firstName} {student.lastName}</strong><small>{student.email}</small></td>
+                          <td>{student.studentId || '—'}</td>
+                          <td>{normalizeDepartment(student.department)}</td>
+                          <td><span className={`status-pill ${student.isActive ? 'active' : 'inactive'}`}>{student.isActive ? 'Active' : 'Inactive'}</span></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-              ) : <p className="text-muted mb-0">No student records found.</p>}
+              ) : <p className="text-muted mb-0">No student records available.</p>}
             </div>
           </div>
-
-          <div className="col-12 col-lg-5">
-            <div className="dashboard-panel h-100">
-              <h3>Enrollment by Year</h3>
-              <p>Students grouped by their enrollment year.</p>
-              {loading ? <p className="text-muted">Loading...</p> : stats.yearStats.length ? (
-                <div className="dashboard-year-list">
-                  {stats.yearStats.map((item) => (
-                    <div className="dashboard-year-item" key={item.year}>
-                      <span>{item.year}</span>
-                      <strong>{item.count}</strong>
-                    </div>
-                  ))}
-                </div>
-              ) : <p className="text-muted">No enrollment-year data found.</p>}
-              <div className="dashboard-mini-summary mt-4">
-                <span>Enrollment years</span>
-                <strong>{stats.yearStats.length}</strong>
+          <div className="col-12 col-lg-4">
+            <div className="dashboard-panel dashboard-overview-panel h-100">
+              <span className="dashboard-section-kicker">AT A GLANCE</span>
+              <h3>Enrollment Snapshot</h3>
+              <p>Detailed enrollment analysis is available on the dedicated Track Enrollment page.</p>
+              <div className="snapshot-grid">
+                <div><span>Students</span><strong>{loading ? '—' : stats.total}</strong></div>
+                <div><span>Departments</span><strong>{loading ? '—' : stats.departments}</strong></div>
+                <div><span>Enrollment years</span><strong>{loading ? '—' : stats.years}</strong></div>
               </div>
+              <Link to="/Enroll" className="dashboard-analytics-link">
+                <span><strong>Open Track Enrollment</strong><small>View charts and detailed breakdowns</small></span><b>→</b>
+              </Link>
             </div>
           </div>
-        </div>
-
-        <div className="dashboard-panel mt-4">
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <div>
-              <h3>Recent Student Records</h3>
-              <p>Latest records based on the most recently created or updated data.</p>
-            </div>
-            <Link to="/students" className="btn btn-sm btn-outline-primary">View all</Link>
-          </div>
-          {loading ? <p className="text-muted">Loading records...</p> : recentStudents.length ? (
-            <div className="dashboard-student-table-wrap">
-              <table className="table dashboard-student-table align-middle mb-0">
-                <thead>
-                  <tr><th>Student</th><th>ID</th><th>Department</th><th>Year</th><th>Status</th></tr>
-                </thead>
-                <tbody>
-                  {recentStudents.map((student) => (
-                    <tr key={student._id || student.studentId}>
-                      <td>
-                        <strong>{student.firstName} {student.lastName}</strong>
-                        <small>{student.email}</small>
-                      </td>
-                      <td>{student.studentId || '—'}</td>
-                      <td>{normalizeDepartment(student.department)}</td>
-                      <td>{student.enrollmentYear || '—'}</td>
-                      <td><span className={`status-pill ${student.isActive ? 'active' : 'inactive'}`}>{student.isActive ? 'Active' : 'Inactive'}</span></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : <p className="text-muted mb-0">No student records available.</p>}
         </div>
 
         <div className="dashboard-feature-grid mt-4">
