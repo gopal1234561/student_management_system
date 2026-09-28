@@ -42,7 +42,7 @@ const Enroll = () => {
     datasets: [{ data: enrollmentStats.yearStats.map(item => item.count) }],
   };
 
-  if (loading) return <main className="container enrollment-page">Loading enrollment data...</div>;
+  if (loading) return <main className="container enrollment-page">Loading enrollment data...</main>;
 
   return (
     <div className="container mt-5">
