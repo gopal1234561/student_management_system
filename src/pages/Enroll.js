@@ -42,29 +42,21 @@ const Enroll = () => {
     datasets: [{ data: enrollmentStats.yearStats.map(item => item.count) }],
   };
 
-  if (loading) return <div className="container mt-5">Loading enrollment data...</div>;
+  if (loading) return <main className="container enrollment-page">Loading enrollment data...</div>;
 
   return (
     <div className="container mt-5">
-      <h2 className="mb-4 text-center">Track Enrollment</h2>
-      <p className="text-center text-muted mb-4">Monitor student enrollment and view enrollment trends.</p>
+      <header className="enrollment-hero">
+        <div><span className="enrollment-eyebrow">STUDENT ANALYTICS</span><h2>Track Enrollment</h2><p>Monitor student enrollment and explore department and academic-year trends.</p></div>
+        <div className="enrollment-hero-icon" aria-hidden="true">↗</div>
+      </header>
       {error && <div className="alert alert-danger">{error}</div>}
-      <div className="row mb-4">
-        <div className="col-md-6">
-          <h4>Total Students Enrolled: {enrollmentStats.totalStudents}</h4>
-        </div>
-        <div className="col-md-6">
-          <h4>Enrollments by Department</h4>
-          {enrollmentStats.totalStudents > 0 ? <Pie data={departmentData} /> : <p>No data available.</p>}
-        </div>
-      </div>
-      <div className="row mb-4">
-        <div className="col-md-8 mx-auto">
-          <h4>Enrollments by Year</h4>
-          {enrollmentStats.totalStudents > 0 ? <Pie data={yearData} /> : <p>No data available.</p>}
-        </div>
-      </div>
-    </div>
+      <section className="enrollment-summary"><div className="summary-icon">👥</div><div><span>Total students enrolled</span><strong>{enrollmentStats.totalStudents}</strong><small>Across all departments and years</small></div></section>
+      <section className="enrollment-charts">
+        <article className="enrollment-chart-card"><div className="chart-heading"><div><span className="chart-kicker">DISTRIBUTION</span><h4>By Department</h4></div><span className="chart-badge">Departments</span></div><div className="enrollment-chart">{enrollmentStats.totalStudents > 0 && enrollmentStats.departmentStats.length > 0 ? <Pie data={departmentData} options={{ maintainAspectRatio: false, plugins: { legend: { position: "bottom", labels: { usePointStyle: true, padding: 18 } } } }} /> : <p className="enrollment-empty">No department data available yet.</p>}</div></article>
+        <article className="enrollment-chart-card"><div className="chart-heading"><div><span className="chart-kicker">YEARLY OVERVIEW</span><h4>By Academic Year</h4></div><span className="chart-badge">Year groups</span></div><div className="enrollment-chart">{enrollmentStats.totalStudents > 0 && enrollmentStats.yearStats.length > 0 ? <Pie data={yearData} options={{ maintainAspectRatio: false, plugins: { legend: { position: "bottom", labels: { usePointStyle: true, padding: 18 } } } }} /> : <p className="enrollment-empty">No academic-year data available yet.</p>}</div></article>
+      </section>
+    </main>
   );
 };
 
