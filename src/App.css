@@ -280,25 +280,25 @@ body {
 :root {
   --ui-ink: #17324d;
   --ui-muted: #61758a;
-  --ui-primary: #e8791f;
-  --ui-primary-strong: #c95b0b;
-  --ui-secondary: #f59e0b;
-  --ui-accent: #ffb13b;
+  --ui-primary: #2563eb;
+  --ui-primary-strong: #1d4ed8;
+  --ui-secondary: #3b82f6;
+  --ui-accent: #60a5fa;
   --ui-surface: #ffffff;
-  --ui-soft: #fff7ed;
-  --ui-border: #eadfd5;
+  --ui-soft: #eff6ff;
+  --ui-border: #dbe7f5;
 }
 
 body {
   background:
-    radial-gradient(circle at 5% 8%, rgba(232, 121, 31, .07), transparent 25rem),
-    radial-gradient(circle at 95% 20%, rgba(15, 35, 58, .06), transparent 24rem),
+    radial-gradient(circle at 5% 8%, rgba(37, 99, 235, .07), transparent 25rem),
+    radial-gradient(circle at 95% 20%, rgba(15, 35, 58, .05), transparent 24rem),
     #f6fafc;
   color: var(--ui-ink);
 }
 
 .student-list-page h2 {
-  color: #162b43;
+  color: #16324f;
 }
 
 .student-filters {
@@ -319,8 +319,8 @@ body {
 
 .student-list-page .form-control:focus,
 .student-list-page .form-select:focus {
-  border-color: #e8791f;
-  box-shadow: 0 0 0 .2rem rgba(232, 121, 31, .12);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 .2rem rgba(37, 99, 235, .12);
 }
 
 .btn,
@@ -336,25 +336,25 @@ body {
 }
 
 .btn-primary {
-  background: #e8791f !important;
-  border-color: #e8791f !important;
+  background: #2563eb !important;
+  border-color: #2563eb !important;
 }
 
 .btn-primary:hover,
 .btn-primary:focus {
-  background: #c95b0b !important;
-  border-color: #c95b0b !important;
-  box-shadow: 0 6px 16px rgba(232, 121, 31, .18);
+  background: #1d4ed8 !important;
+  border-color: #1d4ed8 !important;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, .18);
   transform: translateY(-1px);
 }
 
 .btn-outline-primary {
-  color: #e8791f !important;
-  border-color: #e8791f !important;
+  color: #2563eb !important;
+  border-color: #2563eb !important;
 }
 
 .btn-outline-primary:hover {
-  background: #e8791f !important;
+  background: #2563eb !important;
   color: #fff !important;
 }
 
@@ -365,12 +365,12 @@ body {
 }
 
 .dashboard-hero {
-  background: #e8791f !important;
+  background: #2563eb !important;
   box-shadow: 0 16px 34px rgba(18, 35, 55, .16);
 }
 
 .dashboard-hero .btn-light {
-  color: #e8791f;
+  color: #2563eb;
 }
 
 .dashboard-stat-card:hover,
@@ -389,18 +389,18 @@ body {
 .dashboard-stat-card strong,
 .dashboard-panel h3,
 .dashboard-feature-grid h5 {
-  color: #162b43;
+  color: #16324f;
 }
 
 .dashboard-feature-grid a,
 .quick-action span {
-  color: #e8791f;
+  color: #2563eb;
 }
 
 .quick-action:hover {
-  color: #c95b0b;
-  background: #fff7ed;
-  border-color: #f3c79f;
+  color: #1d4ed8;
+  background: #eff6ff;
+  border-color: #bfdbfe;
 }
 
 .enrollment-hero {
@@ -414,8 +414,8 @@ body {
 }
 
 .enrollment-summary .summary-icon {
-  background: #fff1e6;
-  color: #e8791f;
+  background: #eff6ff;
+  color: #2563eb;
 }
 
 .enrollment-summary .active-icon {
@@ -424,26 +424,26 @@ body {
 }
 
 .enrollment-summary .course-icon {
-  background: #fff4df;
+  background: #eff6ff;
   color: #b46f08;
 }
 
 .enrollment-summary strong,
 .chart-heading h4,
 .breakdown-row strong {
-  color: #162b43;
+  color: #16324f;
 }
 
 .breakdown-bar i {
-  background: #f59e0b;
+  background: #3b82f6;
 }
 
 .enrollment-bar i {
-  background: #e8791f;
+  background: #2563eb;
 }
 
 .status-card {
-  background: #fff8f0;
+  background: #f5f9ff;
 }
 
 @media (prefers-reduced-motion: reduce) {
